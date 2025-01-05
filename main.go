@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import "time"
 
-func main() { fmt.Println("Hello, world!")
+func main() { 
+	gene := NewGenerator("timedata.txt", 500, -30, 120, 10*time.Millisecond)
+	gene.Run()
 }

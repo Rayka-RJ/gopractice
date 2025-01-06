@@ -3,6 +3,9 @@ package main
 import "time"
 
 func main() { 
-	gene := NewGenerator("timedata.txt", 500, -30, 120, 10*time.Millisecond)
+	// Data Preparation
+	// Currently saved in txt
+	gene := NewGenerator("timedata_100k.txt", 100_000, -1000, 1000, 1*time.Millisecond)
 	gene.Run()
+
 }

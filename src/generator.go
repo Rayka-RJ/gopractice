@@ -40,9 +40,9 @@ func (g *Generator) Run() {
 	}
 }
 
-// -+---------------+-
+// -+-----------------------------+-
 //		Auxillary 
-// -+---------------+-
+// -+-----------------------------+-
 
 func (g *Generator) dataCollect() []TimeData {
 	if g.Min > g.Max {

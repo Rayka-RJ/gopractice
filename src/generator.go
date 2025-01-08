@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"math/rand/v2"
 	"os"
+	"sync"
 	"time"
 )
 
@@ -13,55 +15,38 @@ type TimeData struct {
 }
 
 type Generator struct {
-	FileName string 
 	DataAmount int
 	Min float64
 	Max float64
 	Interval time.Duration
 }
 
-func NewGenerator(filename string, dataAmount int, min float64, max float64, interval time.Duration) *Generator {
-	return &Generator{
-		FileName: filename,
-		DataAmount: dataAmount,
-		Min: min,
-		Max: max,
-		Interval: interval,
+func (g *Generator) dataCollect(buf chan TimeData, wg *sync.WaitGroup)  {
+	defer wg.Done()
+
+	for i := 0; i < g.DataAmount; i++ {
+		if g.Min > g.Max {
+			log.Fatalf("Min (%f) cannot be larger than Max (%f)", g.Min, g.Max)
+		}
+		data := TimeData {
+			Timestamp: time.Now(),
+			Value: g.Min + rand.Float64() * (g.Max - g.Min),
+		}
+		buf <- data
+		fmt.Printf("Generated: %+v \n", data)
+		time.Sleep(g.Interval)
 	}
+
+	close(buf)
 }
 
-func (g *Generator) Run() {
-	data := g.dataCollect()
-	err := g.saveToFile(data)
-	if err != nil {
-		fmt.Printf("Fail to save the data: %s \n", err)
-	} else {
-		fmt.Printf("File successfully saved to %s \n", g.FileName)
-	}
-}
 
 // -+-----------------------------+-
 //		Auxillary 
 // -+-----------------------------+-
-
-func (g *Generator) dataCollect() []TimeData {
-	if g.Min > g.Max {
-		panic("Min cannot be larger than Max")
-	}
-	res := make([]TimeData, g.DataAmount)
-	for i := range res {
-		res[i] = TimeData{
-			Timestamp: time.Now(),
-			Value: g.Min + rand.Float64() * (g.Max - g.Min),
-		}
-
-		time.Sleep(g.Interval)
-	}
-	return res
-}
-
-func (g *Generator)saveToFile(data []TimeData) error {
-	file, err := os.Create(g.FileName)
+// Save to txt. Used for the early generator test
+func (g *Generator)_saveToFile(data []TimeData, filename string) error {
+	file, err := os.Create(filename)
 	if err != nil {
 		return err
 	}

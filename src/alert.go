@@ -15,7 +15,7 @@ var rdmGauge = prometheus.NewGaugeVec(
 	[] string {"timestamp"},
 )
 
-func getAlertDate(buf <-chan TimeData, wg *sync.WaitGroup) {
+func getAlertData(buf <-chan TimeData, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	for data := range buf {

@@ -26,7 +26,7 @@ func main() {
 	prometheus.MustRegister(rdmGauge)
 
 	gene := Generator{
-		DataAmount: 50,
+		DataAmount: 10,
 		Min: -1000,
 		Max: 1000,
 		Interval: 1*time.Second,
@@ -52,7 +52,7 @@ func main() {
 	wg.Add(1)
 	go default_db.insertData(conn, buf, &wg)
 	wg.Add(1)
-	go getAlertDate(alert, &wg)
+	go getAlertData(alert, &wg)
 
 	http.Handle("/metrics", promhttp.Handler())
 	go func() {

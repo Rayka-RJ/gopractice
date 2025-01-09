@@ -30,16 +30,20 @@ func (d *DbSetting) initializeDB() {
 	} 
 	fmt.Printf("Database %s is ready. \n", d.Dbname)
 
-	query2 := fmt.Sprintf(`CREATE TABLE IF NOT EXISTS %s.%s (
+	query2 := fmt.Sprintf("DROP TABLE IF EXISTS %s.%s", d.Dbname, d.Tblname)
+	if _, err = conn.Exec(query2); err != nil {
+		fmt.Printf("[DB] Failed to clean table: %s", err)		
+		return		
+	}
+
+	query3 := fmt.Sprintf(`CREATE TABLE IF NOT EXISTS %s.%s (
 		timestamp DateTime,
 		value Float64
-	) ENGINE = MergeTree()
-	PARTITION BY toYYYYMM(Col4) 
-	ORDER BY timestamp
-	SETTINGS index_granularity = 8192; 
+	) ENGINE = MergeTree() 
+	ORDER BY timestamp; 
 	`, d.Dbname, d.Tblname)
 
-	if _, err = conn.Exec(query2); err != nil {
+	if _, err = conn.Exec(query3); err != nil {
 		fmt.Printf("[DB] Failed to create table: %s", err)		
 		return
 	}
@@ -47,7 +51,7 @@ func (d *DbSetting) initializeDB() {
 
 }
 
-func(d *DbSetting) insertData(conn *sql.DB, buf chan TimeData, wg *sync.WaitGroup) {
+func(d *DbSetting) insertData(conn *sql.DB, buf <- chan TimeData, wg *sync.WaitGroup) {
 	// 0. consumer
 	defer wg.Done()
 

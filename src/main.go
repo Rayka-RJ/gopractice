@@ -15,18 +15,20 @@ import (
 func main() {
 
 	default_db := DbSetting{
-		Tcpconnection: "tcp://127.0.0.1:9000?username=default&password=", 
+		Tcpconnection: "tcp://host.docker.internal:9000?username=default&password=", 
 		Dbname: "random_num_records", 
 		Tblname: "real_time_data",
 	}
 	
+	// default tcp: 127.0.0.1:9000
+
 	// 0. Optional (Only run it for the first time)
 	default_db.initializeDB()
 	
 	prometheus.MustRegister(rdmGauge)
 
 	gene := Generator{
-		DataAmount: 10,
+		DataAmount: 20,
 		Min: -1000,
 		Max: 1000,
 		Interval: 1*time.Second,
@@ -62,5 +64,6 @@ func main() {
 	wg.Wait()
 	fmt.Println("All data has been inserted and alerts processed successfully.")
 }
+
 
 

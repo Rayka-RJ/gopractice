@@ -1,6 +1,6 @@
 module github.com/Rayka-RJ/gopractice
 
-go 1.22.2
+go 1.23
 
 require (
 	github.com/ClickHouse/ch-go v0.61.5 // indirect

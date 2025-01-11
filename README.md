@@ -9,6 +9,8 @@
 - 设定prometheus监听端口为8090，程序运行时，[localhost:8090](http://localhost:8090/metrics) 实时生成监听metrics
 - 基于prometheus和grafana的可视化端口均为默认值（Prometheus：9090；Grafana：3000）
 
+2025.01.11: 更改端口为docker ip host.docker.internal
+
 一个运行样本如下：
 ```
 Connected to ClickHouse.

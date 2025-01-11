@@ -9,7 +9,7 @@
 - 设定prometheus监听端口为8090，程序运行时，[localhost:8090](http://localhost:8090/metrics) 实时生成监听metrics
 - 基于prometheus和grafana的可视化端口均为默认值（Prometheus：9090；Grafana：3000）
 
-2025.01.11: 更改端口为docker ip host.docker.internal
+**Attention**: 该程序为实时数据监测，interval的设置必须与prometheus的fetch frequency保持一致。
 
 一个运行样本如下：
 ```
@@ -27,18 +27,13 @@ Insert data: {Timestamp:2025-01-09 21:34:34.882465781 +0800 +08 m=+9.011790292 V
 All data has been inserted and alerts processed successfully.
 
 ```
+metric设有两个label，value记录了实时生成的值，alert显示了该值是否超出阈值（0为safe，1为alert）。
 
 一个metrics样本如下(阈值为0)：
 
 ```
 # HELP real_time_data Randomly generated value (float64)
 # TYPE real_time_data gauge
-real_time_data{timestamp="2025-01-09T21:33:16.85095782+08:00"} 979.4417755519244
-real_time_data{timestamp="2025-01-09T21:33:17.852219095+08:00"} 642.3719597056488
-real_time_data{timestamp="2025-01-09T21:33:20.67352618+08:00"} 420.74495311236024
-real_time_data{timestamp="2025-01-09T21:33:24.675530517+08:00"} 204.228750105887
-real_time_data{timestamp="2025-01-09T21:33:25.675664103+08:00"} 571.0490927396743
-real_time_data{timestamp="2025-01-09T21:33:27.677761742+08:00"} 427.3574340464954
-real_time_data{timestamp="2025-01-09T21:33:28.678871817+08:00"} 784.8105319439703
-real_time_data{timestamp="2025-01-09T21:33:29.679522879+08:00"} 763.0027409710362
+real_time_data{Value="Alert"} 0
+real_time_data{Value="Value"} -173.3504388717426
 ```
